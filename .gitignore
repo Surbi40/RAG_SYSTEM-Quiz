@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Database
+chroma_db/
+chroma_db_store/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large files
+*.pdf
+temp_*

@@ -1,0 +1,17 @@
+# Docker ignore file
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.git
+.gitignore
+.env.local
+.vscode
+*.md
+!README.md
+!API_SPECIFICATION.md
+*.log
+.DS_Store
+Thumbs.db
+
