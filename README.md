@@ -207,6 +207,11 @@ D:\RAG_system\
 ├── generator.py              # Quiz generation module
 ├── requirements.txt          # Python dependencies
 ├── .env                      # API keys (create this)
+├── docs/                     # Detailed technical documentation
+│   ├── API_SPECIFICATION.md  # Detailed endpoint specs
+│   ├── DOCUMENTATION.md      # Full architecture guide
+│   ├── BACKEND_DEVELOPER_GUIDE.md # Handover instructions
+│   └── SYSTEM_HANDOVER_MASTER.md  # Master system overview
 ├── chroma_db/                # Vector database (auto-created)
 └── frontend_integration.html # Frontend example
 ```
