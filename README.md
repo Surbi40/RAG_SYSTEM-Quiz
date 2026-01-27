@@ -201,17 +201,20 @@ function QuizButton({ articleTopic }) {
 
 ```
 D:\RAG_system\
-├── api.py                    # FastAPI REST server
-├── main.py                   # CLI interface
-├── ingest.py                 # PDF ingestion module
-├── generator.py              # Quiz generation module
-├── requirements.txt          # Python dependencies
-├── .env                      # API keys (create this)
+├── src/                      # Source code folder
+│   ├── api.py                # FastAPI REST server
+│   ├── main.py               # CLI interface
+│   ├── ingest.py             # PDF ingestion module
+│   ├── generator.py          # Quiz generation module
+│   ├── rag_engine.py         # RAG core engine
+│   └── test_api.py           # API test suite
 ├── docs/                     # Detailed technical documentation
 │   ├── API_SPECIFICATION.md  # Detailed endpoint specs
 │   ├── DOCUMENTATION.md      # Full architecture guide
 │   ├── BACKEND_DEVELOPER_GUIDE.md # Handover instructions
 │   └── SYSTEM_HANDOVER_MASTER.md  # Master system overview
+├── requirements.txt          # Python dependencies
+├── .env                      # API keys (create this)
 ├── chroma_db/                # Vector database (auto-created)
 └── frontend_integration.html # Frontend example
 ```

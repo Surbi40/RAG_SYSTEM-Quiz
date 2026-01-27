@@ -34,10 +34,10 @@ echo GOOGLE_API_KEY=your_key_here > .env
 
 | Task | Command |
 | :--- | :--- |
-| **Start API Server** | `python api.py` |
-| **Ingest PDF** | `python main.py --ingest document.pdf` |
-| **Interactive Mode** | `python main.py` |
-| **Run Health Tests** | `python test_api.py` |
+| **Start API Server** | `python src/api.py` |
+| **Ingest PDF** | `python src/main.py --ingest document.pdf` |
+| **Interactive Mode** | `python src/main.py` |
+| **Run Health Tests** | `python src/test_api.py` |
 | **Start with Docker** | `docker-compose up --build -d` |
 
 ---
