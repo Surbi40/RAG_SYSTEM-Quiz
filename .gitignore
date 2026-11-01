@@ -1,23 +1,36 @@
-# Python
+﻿# Python
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Virtual environments
 .venv/
-env/
 venv/
+env/
 ENV/
 
-# Database
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Database and vector storage
 chroma_db/
 chroma_db_store/
 
-# Environment
-.env
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# OS
+# IDE and editor
+.vscode/
+.idea/
+
+# Operating system
 .DS_Store
 Thumbs.db
 
-# Large files
+# Large files and generated data
 *.pdf
 temp_*

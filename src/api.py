@@ -16,16 +16,22 @@ Usage:
 """
 
 import os
-from typing import List, Optional
 from pathlib import Path
+from typing import List, Optional
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Query
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-import uvicorn
 
-from ingest import ingest_pdf, ingest_html, ingest_text, vectorstore_exists, load_vectorstore
-from generator import generate_quiz_safe
+from .generator import generate_quiz_safe
+from .ingest import (
+    ingest_html,
+    ingest_pdf,
+    ingest_text,
+    load_vectorstore,
+    vectorstore_exists,
+)
 
 # =============================================================================
 # API Models (Request/Response Schemas)

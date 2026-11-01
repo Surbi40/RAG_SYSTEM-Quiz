@@ -1,17 +1,37 @@
-# Docker ignore file
-__pycache__
-*.pyc
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
 *.pyo
 *.pyd
 .Python
-.git
-.gitignore
-.env.local
-.vscode
-*.md
-!README.md
-!API_SPECIFICATION.md
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Vector database
+chroma_db/
+chroma_db_store/
+
+# Local documents and generated files
+pdfs/
+*.pdf
 *.log
+temp_*
+
+# IDE and operating system
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
-

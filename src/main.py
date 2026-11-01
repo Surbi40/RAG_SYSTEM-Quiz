@@ -1,3 +1,4 @@
+
 """
 Quiz Generator System - Main Entry Point
 =========================================
@@ -28,8 +29,8 @@ import json
 import sys
 from pathlib import Path
 
-from ingest import ingest_pdf, vectorstore_exists
-from generator import generate_quiz_safe
+from .ingest import ingest_pdf, vectorstore_exists
+from .generator import generate_quiz_safe
 
 
 def print_banner():

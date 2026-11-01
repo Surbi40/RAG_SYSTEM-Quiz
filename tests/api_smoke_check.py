@@ -2,15 +2,17 @@
 API Test Script
 ===============
 
-Run this to verify the Quiz Generator API is working correctly.
+Run this script from the project root to verify the Quiz Generator API.
 
 Usage:
-    python test_api.py
-    
-Make sure the API server is running first:
-    python api.py
-"""
+    python .\tests\api_smoke_check.py
 
+Make sure the API server is running in another terminal:
+    uvicorn src.api:app --reload
+
+API documentation:
+    http://localhost:8000/docs
+"""
 import requests
 import json
 import sys
