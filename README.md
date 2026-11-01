@@ -1,8 +1,8 @@
-# Quiz Generator System 📚
+# Quiz Generator System 
 
 A RAG (Retrieval-Augmented Generation) powered Quiz Generator for the **Early Motherhood Support System**.
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -30,15 +30,15 @@ A RAG (Retrieval-Augmented Generation) powered Quiz Generator for the **Early Mo
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## ✨ Features
+##  Features
 
-- 🆓 **Local Embeddings** - HuggingFace model runs on CPU (FREE, unlimited)
-- 🤖 **AI-Powered Quizzes** - Google Gemini generates intelligent questions
-- 📄 **PDF Ingestion** - Upload any PDF to expand knowledge base
-- 🌐 **REST API** - Easy integration with any frontend
-- 📱 **CORS Enabled** - Works with React, Vue, Angular, etc.
+-  **Local Embeddings** - HuggingFace model runs on CPU (FREE, unlimited)
+-  **AI-Powered Quizzes** - Google Gemini generates intelligent questions
+-  **PDF Ingestion** - Upload any PDF to expand knowledge base
+-  **REST API** - Easy integration with any frontend
+-  **CORS Enabled** - Works with React, Vue, Angular, etc.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install Dependencies
 
@@ -80,7 +80,7 @@ curl -X POST http://localhost:8000/api/quiz/generate \
   -d '{"topic": "postpartum depression", "num_questions": 5}'
 ```
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### Health Check
 ```
@@ -135,7 +135,7 @@ file: <PDF file>
 GET /api/topics
 ```
 
-## 🌐 Frontend Integration
+## Frontend Integration
 
 ### JavaScript Example
 
@@ -197,7 +197,7 @@ function QuizButton({ articleTopic }) {
 }
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 D:\RAG_system\
@@ -219,7 +219,7 @@ D:\RAG_system\
 └── frontend_integration.html # Frontend example
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -244,7 +244,7 @@ Edit `ingest.py` to change the embedding model:
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  # or any sentence-transformers model
 ```
 
-## 🚢 Deployment
+## Deployment
 
 ### Docker (Recommended)
 
@@ -270,16 +270,6 @@ CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
 - [ ] Add rate limiting
 - [ ] Set up HTTPS
 
-## 🔒 Security Notes
 
-1. **API Key**: Never expose `GOOGLE_API_KEY` in frontend code
-2. **Ingestion**: Protect the `/api/ingest` endpoint with admin auth
-3. **CORS**: Restrict to your actual domain in production
 
-## 📄 License
 
-MIT License - Free for commercial use
-
----
-
-Built with ❤️ for the Early Motherhood Support System
