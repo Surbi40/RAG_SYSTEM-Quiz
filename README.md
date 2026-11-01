@@ -1,275 +1,221 @@
-# Quiz Generator System 
+# RAG-Based Quiz Generator
 
-A RAG (Retrieval-Augmented Generation) powered Quiz Generator for the **Early Motherhood Support System**.
+A Retrieval-Augmented Generation (RAG) application that generates multiple-choice quizzes from PDF documents using semantic search, local text embeddings, ChromaDB, and Google Gemini.
 
-##  Architecture
+## Overview
 
+The system retrieves relevant information from ingested PDF documents and uses that context to generate topic-specific quiz questions.
+
+Instead of asking an LLM to generate questions from general knowledge alone, the RAG pipeline grounds quiz generation in the content retrieved from the document collection.
+
+## Architecture
+
+```text
+             PDF Documents
+                   |
+                   v
+             PDF Processing
+                   |
+                   v
+          Text Chunking
+          (1000 characters,
+           200 overlap)
+                   |
+                   v
+        HuggingFace Embeddings
+          (all-MiniLM-L6-v2)
+                   |
+                   v
+              ChromaDB
+           Vector Database
+                   |
+                   |
+User Topic --------+
+                   |
+                   v
+            Semantic Retrieval
+             (Top 3 Chunks)
+                   |
+                   v
+             Retrieved Context
+                   |
+                   v
+              Google Gemini
+                   |
+                   v
+          Multiple-Choice Quiz
+                (JSON)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     HYBRID ARCHITECTURE                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐         │
-│  │   PDF       │ -> │   Local     │ -> │  ChromaDB   │         │
-│  │   Files     │    │  Embedding  │    │  Storage    │         │
-│  └─────────────┘    │ (FREE!)     │    └─────────────┘         │
-│                     └─────────────┘                              │
-│                           │                                      │
-│                           ▼                                      │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐         │
-│  │   User      │ -> │  Semantic   │ -> │   Gemini    │         │
-│  │   Topic     │    │  Search     │    │   LLM       │         │
-│  └─────────────┘    │ (FREE!)     │    │  (1 call)   │         │
-│                     └─────────────┘    └─────────────┘         │
-│                                              │                   │
-│                                              ▼                   │
-│                                        ┌─────────────┐          │
-│                                        │   Quiz      │          │
-│                                        │   JSON      │          │
-│                                        └─────────────┘          │
-└─────────────────────────────────────────────────────────────────┘
+
+## Features
+
+- **Retrieval-Augmented Generation:** Uses retrieved document content to ground quiz generation.
+- **PDF Ingestion:** Extracts and processes PDF documents for the knowledge base.
+- **Local Embeddings:** Uses a HuggingFace sentence-transformer embedding model.
+- **Vector Database:** Stores document embeddings in ChromaDB.
+- **Semantic Retrieval:** Retrieves relevant document chunks based on a user's topic.
+- **AI Quiz Generation:** Uses Google Gemini to generate multiple-choice questions.
+- **REST API:** Provides a FastAPI backend for application integration.
+- **API Smoke Checks:** Includes a script for manually checking API functionality.
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Programming language | Python |
+| API framework | FastAPI |
+| LLM | Google Gemini |
+| Embedding model | all-MiniLM-L6-v2 |
+| Embedding framework | HuggingFace / Sentence Transformers |
+| Vector database | ChromaDB |
+| RAG framework | LangChain |
+| PDF processing | PyPDF |
+| Environment configuration | python-dotenv |
+
+## Project Structure
+
+```text
+RAG_system/
+│
+├── src/
+│   ├── __init__.py
+│   ├── api.py                 # FastAPI application
+│   ├── main.py                # Main application entry point
+│   ├── ingest.py              # PDF ingestion functionality
+│   ├── generator.py           # Quiz generation functionality
+│   └── rag_engine.py          # RAG pipeline and retrieval logic
+│
+├── tests/
+│   └── api_smoke_check.py     # Manual API smoke checks
+│
+├── pdfs/                      # PDF documents
+├── chroma_db/                 # Local vector storage (if used)
+│
+├── .env                       # Local environment variables
+├── .env.example               # Environment variable template
+├── .gitignore
+├── .dockerignore
+├── Dockerfile
+├── docker-compose.yml
+├── pytest.ini
+├── requirements.txt
+└── README.md
 ```
 
-##  Features
+## Getting Started
 
--  **Local Embeddings** - HuggingFace model runs on CPU (FREE, unlimited)
--  **AI-Powered Quizzes** - Google Gemini generates intelligent questions
--  **PDF Ingestion** - Upload any PDF to expand knowledge base
--  **REST API** - Easy integration with any frontend
--  **CORS Enabled** - Works with React, Vue, Angular, etc.
-
-## Quick Start
-
-### 1. Install Dependencies
+### 1. Clone the repository
 
 ```bash
+git clone https://github.com/Surbi40/RAG_SYSTEM-Quiz.git
+cd RAG_SYSTEM-Quiz
+```
+
+### 2. Create a virtual environment
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```powershell
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 2. Set Up Environment
+### 4. Configure environment variables
 
-Create a `.env` file:
+Create a `.env` file in the project root.
+
+Use `.env.example` as a reference:
 
 ```env
-GOOGLE_API_KEY=your_api_key_here
+GOOGLE_API_KEY=your_gemini_api_key_here
 ```
 
-### 3. Ingest PDF Documents
+Get your API key from [Google AI Studio](https://aistudio.google.com/apikey).
 
-```bash
-python main.py --ingest your_document.pdf
+**Security:** Never commit your actual `.env` file or expose your API key in source code, logs, screenshots, or Git history.
+
+### 5. Start the API server
+
+From the project root:
+
+```powershell
+uvicorn src.api:app --reload
 ```
 
-### 4. Start the API Server
+The API server should be available at:
 
-```bash
-python api.py
+```text
+http://localhost:8000
 ```
 
-The API will be available at: http://localhost:8000
+Interactive API documentation:
 
-### 5. Test Quiz Generation
-
-```bash
-# Using CLI
-python main.py --topic "postpartum depression" --num 5
-
-# Using API
-curl -X POST http://localhost:8000/api/quiz/generate \
-  -H "Content-Type: application/json" \
-  -d '{"topic": "postpartum depression", "num_questions": 5}'
+```text
+http://localhost:8000/docs
 ```
 
-##  API Endpoints
+## Testing
 
-### Health Check
-```
-GET /api/health
-```
+The project includes a manual API smoke-check script.
 
-### Generate Quiz
-```
-POST /api/quiz/generate
-Content-Type: application/json
+Make sure the API server is running in another terminal, then execute:
 
-{
-    "topic": "postpartum depression",
-    "num_questions": 5
-}
+```powershell
+python .\tests\api_smoke_check.py
 ```
 
-Response:
-```json
-{
-    "success": true,
-    "topic": "postpartum depression",
-    "questions": [
-        {
-            "id": 1,
-            "question": "What is the EPDS used for?",
-            "options": [
-                {"letter": "A", "text": "...", "is_correct": false},
-                {"letter": "B", "text": "...", "is_correct": true},
-                {"letter": "C", "text": "...", "is_correct": false},
-                {"letter": "D", "text": "...", "is_correct": false}
-            ],
-            "correct_answer": "B. ...",
-            "explanation": "Detailed explanation..."
-        }
-    ],
-    "total_questions": 5,
-    "message": "Quiz generated successfully"
-}
-```
+The script checks API functionality, including health checks, topic retrieval, quiz generation, and document-related endpoints.
 
-### Ingest PDF (Admin)
-```
-POST /api/ingest
-Content-Type: multipart/form-data
-
-file: <PDF file>
-```
-
-### Get Suggested Topics
-```
-GET /api/topics
-```
-
-## Frontend Integration
-
-### JavaScript Example
-
-```javascript
-async function generateQuiz(topic) {
-    const response = await fetch('http://localhost:8000/api/quiz/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            topic: topic,
-            num_questions: 5
-        })
-    });
-    
-    const quiz = await response.json();
-    
-    if (quiz.success) {
-        displayQuiz(quiz.questions);
-    } else {
-        showError(quiz.message);
-    }
-}
-```
-
-### React Component Example
-
-```jsx
-import { useState } from 'react';
-
-function QuizButton({ articleTopic }) {
-    const [quiz, setQuiz] = useState(null);
-    const [loading, setLoading] = useState(false);
-    
-    const handleClick = async () => {
-        setLoading(true);
-        try {
-            const res = await fetch('/api/quiz/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    topic: articleTopic,
-                    num_questions: 5
-                })
-            });
-            const data = await res.json();
-            setQuiz(data);
-        } finally {
-            setLoading(false);
-        }
-    };
-    
-    return (
-        <button onClick={handleClick} disabled={loading}>
-            {loading ? 'Generating...' : 'Take Quiz'}
-        </button>
-    );
-}
-```
-
-##  Project Structure
-
-```
-D:\RAG_system\
-├── src/                      # Source code folder
-│   ├── api.py                # FastAPI REST server
-│   ├── main.py               # CLI interface
-│   ├── ingest.py             # PDF ingestion module
-│   ├── generator.py          # Quiz generation module
-│   ├── rag_engine.py         # RAG core engine
-│   └── test_api.py           # API test suite
-├── docs/                     # Detailed technical documentation
-│   ├── API_SPECIFICATION.md  # Detailed endpoint specs
-│   ├── DOCUMENTATION.md      # Full architecture guide
-│   ├── BACKEND_DEVELOPER_GUIDE.md # Handover instructions
-│   └── SYSTEM_HANDOVER_MASTER.md  # Master system overview
-├── requirements.txt          # Python dependencies
-├── .env                      # API keys (create this)
-├── chroma_db/                # Vector database (auto-created)
-└── frontend_integration.html # Frontend example
-```
+Some checks require a working Gemini API key and an accessible vector database.
 
 ## Configuration
 
 ### Environment Variables
 
 | Variable | Description | Required |
-|----------|-------------|----------|
+|---|---|---|
 | `GOOGLE_API_KEY` | Google Gemini API key | Yes |
 
-### Model Configuration
+### RAG Configuration
 
-Edit `generator.py` to change the LLM model:
+The current RAG implementation uses the following configuration:
 
-```python
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",  # or "gemini-2.5-pro"
-    temperature=0.3,
-)
-```
+| Parameter | Value |
+|---|---|
+| Embedding model | `all-MiniLM-L6-v2` |
+| Chunk size | 1000 characters |
+| Chunk overlap | 200 characters |
+| Retrieved chunks | 3 |
+| Gemini temperature | 0.3 |
+| Gemini model | `gemini-1.5-flash` |
 
-Edit `ingest.py` to change the embedding model:
+These values can be adjusted in the RAG implementation.
 
-```python
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"  # or any sentence-transformers model
-```
+## How the RAG Pipeline Works
 
-## Deployment
+1. **Document ingestion:** PDF documents are loaded and their text is extracted.
+2. **Text chunking:** Extracted text is divided into smaller overlapping chunks.
+3. **Embedding generation:** Each chunk is converted into a numerical vector using the HuggingFace embedding model.
+4. **Vector storage:** The vectors and associated document content are stored in ChromaDB.
+5. **User query:** A user submits a topic for quiz generation.
+6. **Semantic retrieval:** The system retrieves the three most relevant document chunks.
+7. **Quiz generation:** Retrieved context is passed to Google Gemini.
+8. **Structured output:** The generated quiz is parsed into JSON.
 
-### Docker (Recommended)
+## Future Improvements
 
-```dockerfile
-FROM python:3.10-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-EXPOSE 8000
-
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-### Production Checklist
-
-- [ ] Remove `"*"` from CORS origins in `api.py`
-- [ ] Add authentication to `/api/ingest` endpoint
-- [ ] Set up proper logging
-- [ ] Use environment-based configuration
-- [ ] Add rate limiting
-- [ ] Set up HTTPS
-
-
-
-
+- Improve quiz-generation output validation.
+- Add authentication and authorization.
+- Introduce more flexible retrieval and ranking strategies.
+- Add automated unit and integration tests.
+- Improve error handling and logging.
+- Add configurable LLM and embedding models.
+- Support additional document formats.
+- Improve deployment and production configuration.
